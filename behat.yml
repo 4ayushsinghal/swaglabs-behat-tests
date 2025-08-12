@@ -1,0 +1,17 @@
+default:
+  suites:
+    default:
+      contexts:
+        - FeatureContext
+  extensions:
+    Behat\MinkExtension:
+      base_url: https://www.saucedemo.com
+      sessions:
+        default:
+          selenium2: 
+            wd_host: "http://localhost:4444"
+            capabilities:
+              browserName: chrome
+              chrome:
+                switches: ["--no-sandbox", "--disable-gpu"]
+                binary: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"

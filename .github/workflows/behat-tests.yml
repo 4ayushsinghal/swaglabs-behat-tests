@@ -1,0 +1,50 @@
+name: Behat Test Suite
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  behat:
+    runs-on: ubuntu-latest
+    services:
+      selenium:
+        image: selenium/standalone-chrome:latest
+        ports:
+          - 4444:4444
+        options: >-
+          --shm-size=2g
+        env:
+          SE_OPTS: "--whitelisted-ips="
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+          extensions: mbstring, dom, json, curl
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Wait for Selenium to be ready
+        run: |
+          echo "Waiting for Selenium to start..."
+          for i in {1..30}; do
+            if curl -s http://localhost:4444/wd/hub/status | grep -q '"ready":true'; then
+              echo "Selenium is ready!"
+              break
+            fi
+            echo "Waiting..."
+            sleep 2
+          done
+
+      - name: Run Behat tests
+        run: vendor/bin/behat -f progress
