@@ -9,7 +9,7 @@ class InventoryPage extends BasePage
     private $title = '[data-test="title"]';
     private $inventoryItems = '.inventory_item';
 
-    public function visit($url = '/inventory.html')
+    public function visit($url = 'https://www.saucedemo.com/inventory.html')
     {
         $this->session->visit($url);
     }

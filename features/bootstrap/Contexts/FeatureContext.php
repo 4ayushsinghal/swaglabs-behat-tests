@@ -173,4 +173,85 @@ class FeatureContext extends MinkContext implements Context
     {
         $this->cartPage->clickFinish();
     }
+
+
+
+    /**
+     * @When I refresh the page
+     */
+    public function iRefreshThePage()
+    {
+        $this->getSession()->reload();
+        $this->session->wait(2000);
+    }
+
+    /**
+     * @Then I should still see the inventory page
+     */
+    public function iShouldStillSeeTheInventoryPage()
+    {
+        Assert::assertTrue($this->inventoryPage->isInventoryPageVisible());
+    }
+
+    /**
+     * @When I return to the inventory page
+     */
+    public function iReturnToTheInventoryPage()
+    {
+        $this->inventoryPage->visit();
+    }
+
+    /**
+     * @Then the cart should contain :count items
+     */
+    public function theCartShouldContainItems($count)
+    {
+        Assert::assertTrue(
+            (string) $this->inventoryPage->getShoppingCartItemCount() === (string) $count,
+            sprintf(
+                'Expected cart item count to be %s, but got %s',
+                (string) $count,
+                (string) $this->inventoryPage->getShoppingCartItemCount()
+            )
+        );
+    }
+
+    /**
+     * @When I click the checkout button
+     * @throws ElementNotFoundException
+     */
+    public function iClickTheCheckoutButton()
+    {
+        $this->inventoryPage->clickShoppingCartIcon();
+    }
+
+    /**
+     * @Then I should see empty cart
+     */
+    public function iShouldSeeEmptyCart()
+    {
+        Assert::assertEquals($this->cartPage->getSumOfAllItemPrices(), 0.0);
+    }
+
+    /**
+     * @When I log out
+     * @throws ElementNotFoundException
+     */
+    public function iLogOut()
+    {
+        $this->inventoryPage->clickMenuIcon();
+        $this->session->wait(1000);
+        $this->inventoryPage->clickMenuLogout();
+        $this->session->wait(1000);
+    }
+
+    /**
+     * @Then I should see the login page
+     *
+     * @throws ElementNotFoundException
+     */
+    public function iShouldSeeTheLoginPage()
+    {
+        $this->loginPage->isLoginPageVisible();
+    }
 }

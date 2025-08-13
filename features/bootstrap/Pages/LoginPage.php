@@ -35,8 +35,8 @@ class LoginPage extends BasePage
         return $this->find('css', $this->error)->getText();
     }
 
-    public function isLoginPageVisible(): bool
+    public function isLoginPageVisible()
     {
-        return $this->page->find('css', $this->loginButton)->isVisible();
+        return $this->page->find('css', $this->loginButton);
     }
 }
