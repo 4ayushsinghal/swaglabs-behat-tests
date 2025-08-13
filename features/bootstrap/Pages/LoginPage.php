@@ -15,6 +15,7 @@ class LoginPage extends BasePage
     public function visit($url = 'https://www.saucedemo.com')
     {
         $this->session->visit($url);
+        $this->session->wait(2000);
     }
 
     /**

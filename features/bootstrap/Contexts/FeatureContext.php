@@ -240,9 +240,9 @@ class FeatureContext extends MinkContext implements Context
     public function iLogOut()
     {
         $this->inventoryPage->clickMenuIcon();
-        $this->session->wait(1000);
+        $this->session->wait(2000);
         $this->inventoryPage->clickMenuLogout();
-        $this->session->wait(1000);
+        $this->session->wait(2000);
     }
 
     /**

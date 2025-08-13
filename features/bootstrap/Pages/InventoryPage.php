@@ -12,6 +12,7 @@ class InventoryPage extends BasePage
     public function visit($url = 'https://www.saucedemo.com/inventory.html')
     {
         $this->session->visit($url);
+        $this->session->wait(2000);
     }
 
     public function isInventoryPageVisible(): bool

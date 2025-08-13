@@ -26,6 +26,7 @@ class CartPage extends BasePage
     public function visit($url = 'https://www.saucedemo.com/cart.html')
     {
         $this->session->visit($url);
+        $this->session->wait(2000);
     }
 
     /**
