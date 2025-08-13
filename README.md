@@ -101,9 +101,22 @@ swaglabs-behat-tests/
 │   ├── login.feature
 │   ├── sorting.feature
 │   ├── checkout.feature
+│   ├── extra_scenarios.feature
 │   └── bootstrap/
-│       └── FeatureContext.php
+│       └── Contexts/
+│             └── FeatureContext.php
+│   └── bootstrap/
+│       └── Pages/
+│             └── BasePage.php
+│             └── CartPage.php
+│             └── InventoryPage.php
+│             └── LoginPage.php
+├── build/
+│   └── html/
+│       └── index.html
 └── README.md
+└── .env
+└── .gitignore
 ```
 
 ## ⚙ Configuration
