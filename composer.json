@@ -4,14 +4,23 @@
     "require": {
         "monolog/monolog": "^3.9"
     },
+    "scripts": {
+        "test": "vendor/bin/behat --format=html --out ./build/html"
+    },
     "require-dev": {
         "behat/behat": "^3.15",
         "behat/mink": "^1.12",
         "behat/mink-selenium2-driver": "^1.7",
         "behat/mink-extension": "^2.3",
-        "friends-of-behat/mink-extension": "^2.3"
+        "friends-of-behat/mink-extension": "^2.3",
+        "emuse/behat-html-formatter": "^2.0",
+        "vlucas/phpdotenv": "^5.6",
+        "phpunit/phpunit": "^12.3"
     },
     "autoload": {
-    "psr-4": { "": "features/bootstrap/" }
+    "psr-4": {
+      "Contexts\\": "features/bootstrap/Contexts",
+      "Pages\\": "features/bootstrap/Pages"
+    }
   }
 }

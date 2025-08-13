@@ -44,20 +44,51 @@ cd swaglabs-behat-tests
 composer install
 ```
 
-### 3. Start Selenium
+### 3. Start Selenium Standalone server for chrome
 
-Using Docker (recommended):
+Options (any one):
+
+#### A. Using Docker:
 
 ```bash
-docker run -d --rm -p 4444:4444 --name selenium-server selenium/standalone-chrome
+docker run -d -p 4444:4444 --shm-size 2g --name selenium-server selenium/standalone-chrome:4.21.0
+export WD_HOST=http://127.0.0.1:4444/wd/hub
 ```
 
-> ⚠️ For headless mode, add --headless to Chrome options in behat.yml.
+#### B. Running it locally (Install chromedriver for that):
+
+Install Chrome Driver (ignore if already installed)
+
+```bash
+brew install chromedriver
+```
+
+```bash
+export WD_HOST=http://127.0.0.1:4444
+chromedriver --port=4444 &
+```
+
+        OR
+
+You can use nohup to run it in the background
+
+```bash
+export WD_HOST=http://127.0.0.1:4444
+nohup chromedriver --port=4444 &
+```
+
+> ⚠️ For headed mode, remove --headless from Chrome options in behat.yml.
 
 ### 4. Run Tests
 
 ```bash
-vendor/bin/behat -f progress
+composer test
+```
+
+### 5. Open the HTML report
+
+```bash
+open ./build/html/index.html
 ```
 
 ## 📁 Project Structure

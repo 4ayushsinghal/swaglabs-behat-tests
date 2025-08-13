@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       selenium:
-        image: selenium/standalone-chrome:latest
+        image: selenium/standalone-chrome:4.21.0
         ports:
           - 4444:4444
         options: >-
@@ -35,6 +35,7 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Wait for Selenium to be ready
+        timeout-minutes: 5
         run: |
           echo "Waiting for Selenium to start..."
           for i in {1..30}; do
@@ -47,4 +48,13 @@ jobs:
           done
 
       - name: Run Behat tests
-        run: vendor/bin/behat -f progress
+        timeout-minutes: 5
+        env:
+          WD_HOST: http://127.0.0.1:4444/wd/hub
+        run: vendor/bin/behat --format=html --out ./build/html
+
+      - name: Upload Behat HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: behat-html-report
+          path: ./build/html
