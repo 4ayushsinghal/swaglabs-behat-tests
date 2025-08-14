@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Session;
 use Behat\MinkExtension\Context\MinkContext;
+use Behat\Step\Given;
 use Exception;
 use Pages\CartPage;
 use Pages\InventoryPage;
@@ -20,7 +21,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @var Session
      */
-    private $session;
+    private Session $session;
     /**
      * @var LoginPage
      */
@@ -39,7 +40,7 @@ class FeatureContext extends MinkContext implements Context
      * Initializes page objects after Mink session is available
      * @BeforeScenario
      */
-    public function beforeScenario(BeforeScenarioScope $scope)
+    public function beforeScenario(BeforeScenarioScope $scope): void
     {
         $this->session = $this->getSession();
         $this->loginPage = new LoginPage($this->session);
@@ -58,7 +59,7 @@ class FeatureContext extends MinkContext implements Context
      * @When I log in with username :username and password :password
      * @throws ElementNotFoundException
      */
-    public function iLogInWithUsernameAndPassword($username, $password)
+    public function iLogInWithUsernameAndPassword($username, $password): void
     {
         $this->loginPage->login($username, $password);
     }
@@ -67,17 +68,17 @@ class FeatureContext extends MinkContext implements Context
      * @Then I should see an error containing :text
      * @throws Exception
      */
-    public function iShouldSeeAnErrorContaining($text)
+    public function iShouldSeeAnErrorContaining($text): void
     {
         $errorMessage = $this->loginPage->getErrorMessage();
-        Assert::assertTrue(strpos($errorMessage, $text) !== false);
+        Assert::assertTrue(str_contains($errorMessage, $text));
     }
 
     /**
-     * @Given /^I am logged in as "([^"]*)" with password "([^"]*)"$/
      * @throws ElementNotFoundException
      */
-    public function iAmLoggedInAsWithPassword($username, $password)
+    #[Given('I am logged in as :arg1 with password :arg2')]
+    public function iAmLoggedInAsWithPassword($username, $password): void
     {
         $this->loginPage->visit();
         $this->loginPage->login($username, $password);
@@ -88,8 +89,9 @@ class FeatureContext extends MinkContext implements Context
 
     /**
      * @When I sort products by :option
+     * @throws Exception
      */
-    public function iSortProductsBy($option)
+    public function iSortProductsBy($option): void
     {
         $this->inventoryPage->selectSortOption($option);
     }
@@ -98,7 +100,7 @@ class FeatureContext extends MinkContext implements Context
      * @Then the product list should be sorted in reverse alphabetical order
      * @throws Exception
      */
-    public function theProductListShouldBeSortedInReverseAlphabeticalOrder()
+    public function theProductListShouldBeSortedInReverseAlphabeticalOrder(): void
     {
         $names = $this->inventoryPage->getAllInventoryItemNames();
         $sorted = $names;
@@ -110,7 +112,7 @@ class FeatureContext extends MinkContext implements Context
      * @When I add :productName to the cart
      * @throws Exception
      */
-    public function iAddToTheCart($productName)
+    public function iAddToTheCart($productName): void
     {
         $this->inventoryPage->addItemToTheCart($productName);
     }
@@ -118,7 +120,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @When I go to the cart
      */
-    public function iGoToTheCart()
+    public function iGoToTheCart(): void
     {
         $this->cartPage->visit();
     }
@@ -127,7 +129,7 @@ class FeatureContext extends MinkContext implements Context
      * @When I proceed to checkout with:
      * @throws ElementNotFoundException
      */
-    public function iProceedToCheckoutWith(TableNode $table)
+    public function iProceedToCheckoutWith(TableNode $table): void
     {
         $this->cartPage->fillCheckoutDetails($table);
     }
@@ -135,7 +137,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @Then The total price before tax should equal the sum of item prices
      */
-    public function theTotalPriceBeforeTaxShouldEqualTheSumOfItemPrices()
+    public function theTotalPriceBeforeTaxShouldEqualTheSumOfItemPrices(): void
     {
         $itemsTotal = $this->cartPage->getSumOfAllItemPrices();
         $summaryTotal = $this->cartPage->getSummarySubTotalPrice();
@@ -148,7 +150,7 @@ class FeatureContext extends MinkContext implements Context
      * @Then The final price should equal item total plus tax
      * @throws Exception
      */
-    public function theFinalPriceShouldEqualItemTotalPlusTax()
+    public function theFinalPriceShouldEqualItemTotalPlusTax(): void
     {
         $subtotal = $this->cartPage->getSummarySubTotalPrice();
         $tax = $this->cartPage->getTaxPrice();
@@ -159,7 +161,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @Then I should see the message :text
      */
-    public function iShouldSeeTheMessage($text)
+    public function iShouldSeeTheMessage($text): void
     {
         $message = $this->cartPage->getCheckoutCompleteMessage();
         Assert::assertTrue(stripos($message, $text) !== false);
@@ -169,7 +171,7 @@ class FeatureContext extends MinkContext implements Context
      * @Then I Click Finish
      * @throws ElementNotFoundException
      */
-    public function iClickFinish()
+    public function iClickFinish(): void
     {
         $this->cartPage->clickFinish();
     }
@@ -179,7 +181,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @When I refresh the page
      */
-    public function iRefreshThePage()
+    public function iRefreshThePage(): void
     {
         $this->getSession()->reload();
         $this->session->wait(2000);
@@ -188,7 +190,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @Then I should still see the inventory page
      */
-    public function iShouldStillSeeTheInventoryPage()
+    public function iShouldStillSeeTheInventoryPage(): void
     {
         Assert::assertTrue($this->inventoryPage->isInventoryPageVisible());
     }
@@ -196,7 +198,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @When I return to the inventory page
      */
-    public function iReturnToTheInventoryPage()
+    public function iReturnToTheInventoryPage(): void
     {
         $this->inventoryPage->visit();
     }
@@ -204,7 +206,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @Then the cart should contain :count items
      */
-    public function theCartShouldContainItems($count)
+    public function theCartShouldContainItems($count): void
     {
         Assert::assertTrue(
             (string) $this->inventoryPage->getShoppingCartItemCount() === (string) $count,
@@ -220,7 +222,7 @@ class FeatureContext extends MinkContext implements Context
      * @When I click the checkout button
      * @throws ElementNotFoundException
      */
-    public function iClickTheCheckoutButton()
+    public function iClickTheCheckoutButton(): void
     {
         $this->inventoryPage->clickShoppingCartIcon();
     }
@@ -228,7 +230,7 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @Then I should see empty cart
      */
-    public function iShouldSeeEmptyCart()
+    public function iShouldSeeEmptyCart(): void
     {
         Assert::assertEquals($this->cartPage->getSumOfAllItemPrices(), 0.0);
     }
@@ -237,7 +239,7 @@ class FeatureContext extends MinkContext implements Context
      * @When I log out
      * @throws ElementNotFoundException
      */
-    public function iLogOut()
+    public function iLogOut(): void
     {
         $this->inventoryPage->clickMenuIcon();
         $this->session->wait(2000);
@@ -248,9 +250,8 @@ class FeatureContext extends MinkContext implements Context
     /**
      * @Then I should see the login page
      *
-     * @throws ElementNotFoundException
      */
-    public function iShouldSeeTheLoginPage()
+    public function iShouldSeeTheLoginPage(): void
     {
         $this->loginPage->isLoginPageVisible();
     }

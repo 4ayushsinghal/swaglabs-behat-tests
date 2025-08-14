@@ -3,6 +3,7 @@ Feature: Product Sorting
   As a shopper
   I want to sort products by name Z to A and verify ordering
 
+  @smoke
   Scenario: Sort products by name (Z to A)
     Given I am logged in as "standard_user" with password "secret_sauce"
     When I sort products by "Name (Z to A)"

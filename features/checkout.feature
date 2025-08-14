@@ -3,6 +3,7 @@
    As a shopper
    I want to add items to the cart, verify totals and finish checkout
 
+   @smoke
    Scenario: Complete checkout with backpack and bike light
      Given I am logged in as "standard_user" with password "secret_sauce"
      When I add "Sauce Labs Backpack" to the cart

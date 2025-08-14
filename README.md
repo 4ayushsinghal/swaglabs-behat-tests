@@ -82,7 +82,7 @@ nohup chromedriver --port=4444 &
 ### 4. Run Tests
 
 ```bash
-composer test
+composer test -- --tags="smoke"
 ```
 
 ### 5. Open the HTML report
